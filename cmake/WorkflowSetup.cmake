@@ -16,4 +16,5 @@ cpack_ifw_configure_component(Program
     RELEASE_DATE ${RELEASE_DATE}
 )
 
+set(CPACK_GENERATOR ZIP)
 include(CPack)
