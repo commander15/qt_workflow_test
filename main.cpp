@@ -38,7 +38,7 @@ QString userName()
 
 #ifdef Q_OS_LINUX
     return qEnvironmentVariable("USER", defaultName);
-#elif Q_OS_WIN
+#elif defined(Q_OS_WIN)
     return qEnvironmentVariable("USERNAME", defaultName);
 #else
     return defaultName;
