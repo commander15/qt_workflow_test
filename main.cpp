@@ -13,21 +13,19 @@ int main(int argc, char *argv[])
     app.setOrganizationName("Commander Systems");
 
     // IO Streams
-    QTextStream stdout(::stdout);
-    QTextStream stdin(::stdin);
-    QTextStream stderr(::stderr);
+    QTextStream out(::stdout);
 
     // Greeting
-    stdout << "Hello " << userName() << " on " << computerName() << " !" << Qt::endl;
+    out << "Hello " << userName() << " on " << computerName() << " !" << Qt::endl;
 
     // Count from 1 to 10 in 10 seconds
     for (int i(1) ; i <= 10; ++i) {
-        stdout << i << Qt::endl;
+        out << i << Qt::endl;
         QThread::msleep(1000);
     }
 
     // Say good bye
-    stdout << "Bye bye" << Qt::endl;
+    out << "Bye bye" << Qt::endl;
 
     return 0;
 }
