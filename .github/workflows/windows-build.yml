@@ -5,8 +5,19 @@ on:
     branches: [ "main" ]
 
 env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
+  # Customize CMake Settings
+  CMAKE_TARGETS: all install package
+  CMAKE_GENERATOR: Ninja
+  CMAKE_BUILD_TYPE: Release
+  # Customize Qt Settings
+  QT_VERSION: 6.9.0
+  QT_HOST: windows
+  QT_TARGET: desktop
+  QT_ARCH: win64_msvc2022_64
+  # Customize MSVC Settings
+  MSVC_ARCH: x64
+  # Internal Settings
+  INSTALL_LOCATION: ${{github.workspace}}/release
 
 jobs:
   windows-build:
@@ -19,10 +30,10 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: '6.9.0'
-        host: 'windows'
-        target: 'desktop'
-        arch: 'win64_msvc2022_64'
+        version: ${{env.QT_VERSION}}
+        host: ${{env.QT_HOST}}
+        target: ${{env.QT_TARGET}}
+        arch: ${{env.QT_ARCH}}
         install-deps: true
 
     - name: Install Build Tools
@@ -33,17 +44,17 @@ jobs:
     - name: Setup MSVC
       uses: ilammy/msvc-dev-cmd@v1
       with:
-        arch: x64
+        arch: ${{env.MSVC_ARCH}}
 
     - name: Configure CMake
       shell: cmd
       # Configure CMake in a 'build' subdirectory
-      run: cmake -G "Ninja" -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: cmake -G ${{env.CMAKE_GENERATOR}} -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.CMAKE_BUILD_TYPE}} -DCMALE_INSTALL_PREFIX=${{env.INSTALL_LOCATION}}
 
     - name: Build
       shell: cmd
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: cmake --build ${{github.workspace}}/build --config ${{env.CMAKE_BUILD_TYPE}} --target ${{CMAKE_TARGETS}}
 
     - name: Run Program
       shell: cmd
