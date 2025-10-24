@@ -29,6 +29,11 @@ jobs:
       # Install CMake and Ninja
       run: choco install -y cmake ninja
 
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x64
+
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory
       run: cmake -G "Ninja" -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
