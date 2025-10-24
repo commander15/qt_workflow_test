@@ -19,7 +19,7 @@ env:
   MSVC_ARCH: x64
   # Internal Settings
   INSTALL_LOCATION: ${{github.workspace}}\release
-  PACKAGE_LOCATION: ${{github.workspace}}\build
+  PACKAGE_LOCATION: ${{github.workspace}}\build\releases
 
 jobs:
   windows-build:
