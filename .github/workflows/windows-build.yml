@@ -26,6 +26,7 @@ jobs:
         install-deps: true
 
     - name: Install Build Tools
+      shell: cmd
       # Install CMake and Ninja
       run: choco install -y cmake ninja
 
@@ -35,13 +36,16 @@ jobs:
         arch: x64
 
     - name: Configure CMake
+      shell: cmd
       # Configure CMake in a 'build' subdirectory
       run: cmake -G "Ninja" -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
+      shell: cmd
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Run Program
+      shell: cmd
       run: ${{github.workspace}}/build/Program.exe
 
