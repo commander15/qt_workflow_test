@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("Commander Systems");
 
     // IO Streams
-    QTextStream out(::stdout);
+    QTextStream out(stdout);
 
     // Greeting
     out << "Hello " << userName() << " on " << computerName() << " !" << Qt::endl;
