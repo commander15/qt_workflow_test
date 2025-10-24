@@ -11,6 +11,7 @@ env:
   CMAKE_BUILD_TYPE: Release
   # Customize Qt Settings
   QT_VERSION: 6.9.0
+  QT_TOOLS: tools_ifw
   QT_HOST: windows
   QT_TARGET: desktop
   QT_ARCH: win64_msvc2022_64
@@ -31,6 +32,7 @@ jobs:
       uses: jurplel/install-qt-action@v4
       with:
         version: ${{env.QT_VERSION}}
+        tools: ${{env.QT_TOOLS}}
         host: ${{env.QT_HOST}}
         target: ${{env.QT_TARGET}}
         arch: ${{env.QT_ARCH}}
