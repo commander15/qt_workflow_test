@@ -19,6 +19,7 @@ env:
   MSVC_ARCH: x64
   # Internal Settings
   INSTALL_LOCATION: ${{github.workspace}}\release
+  PACKAGE_LOCATION: ${{github.workspace}}\build
 
 jobs:
   windows-build:
@@ -58,11 +59,11 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.CMAKE_BUILD_TYPE}} --target ${{env.CMAKE_TARGETS}}
 
-    - name: Check
-      shell: cmd
-      run: dir ${{env.INSTALL_LOCATION}}
-
     - name: Run Program
       shell: cmd
       run: ${{github.workspace}}/build/Program.exe
+
+    - name: Check
+      shell: cmd
+      run: dir ${{env.PACKAGE_LOCATION}}
 
