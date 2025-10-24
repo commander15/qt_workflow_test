@@ -6,7 +6,7 @@ on:
 
 env:
   # Customize CMake Settings
-  CMAKE_TARGETS: all install package
+  CMAKE_TARGETS: 'all install package'
   CMAKE_GENERATOR: Ninja
   CMAKE_BUILD_TYPE: Release
   # Customize Qt Settings
