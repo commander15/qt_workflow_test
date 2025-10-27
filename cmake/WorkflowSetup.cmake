@@ -1,4 +1,4 @@
-set(CPACK_PACKAGE_NAME        "Qt Workflow Test")
+set(CPACK_PACKAGE_NAME        "Qt-Workflow-Test")
 set(CPACK_PACKAGE_VENDOR      "Commander Systems")
 set(CPACK_PACKAGE_DESCRIPTION "Awesome program.")
 set(CPACK_PACKAGE_DIRECTORY   ${CMAKE_BINARY_DIR}/releases)
