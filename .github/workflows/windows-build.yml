@@ -1,4 +1,6 @@
 name: Windows build
+permissions:
+  contents: write
 
 on:
   push:
@@ -17,16 +19,25 @@ env:
   QT_HOST: windows
   QT_TARGET: desktop
   QT_ARCH: win64_msvc2022_64
-  # Customize MSVC Settings
-  MSVC_ARCH: x64
-  # Internal Settings
-  INSTALL_LOCATION: ${{github.workspace}}\release
-  PACKAGE_LOCATION: ${{github.workspace}}\build\releases
 
 jobs:
   windows-build:
+    env:
+      # Customize Qt Settings
+      QT_HOST: windows
+      QT_TARGET: desktop
+      QT_ARCH: win64_msvc2022_64
+      # Customize MSVC Settings
+      MSVC_ARCH: x64
+      # Internal Settings
+      INSTALL_LOCATION: ${{github.workspace}}\release
+      PACKAGE_LOCATION: ${{github.workspace}}\build\releases
+  
     runs-on: windows-latest
-
+    permissions:
+      contents: write
+      deployments: write
+      
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
@@ -42,7 +53,6 @@ jobs:
         install-deps: true
 
     - name: Install Build Tools
-      shell: cmd
       # Install CMake and Ninja
       run: choco install -y cmake ninja
 
@@ -52,49 +62,39 @@ jobs:
         arch: ${{env.MSVC_ARCH}}
 
     - name: Configure CMake
-      shell: cmd
       # Configure CMake in a 'build' subdirectory
-      run: cmake -G ${{env.CMAKE_GENERATOR}} -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.CMAKE_BUILD_TYPE}} -DCMALE_INSTALL_PREFIX=${{env.INSTALL_LOCATION}}
+      run: cmake -G ${{env.CMAKE_GENERATOR}} -B ${{github.workspace}}\build -DCMAKE_BUILD_TYPE=${{env.CMAKE_BUILD_TYPE}} -DCMALE_INSTALL_PREFIX=${{env.INSTALL_LOCATION}}
 
     - name: Build
-      shell: cmd
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.CMAKE_BUILD_TYPE}} --target ${{env.CMAKE_TARGETS}}
+      run: cmake --build ${{github.workspace}}\build --config ${{env.CMAKE_BUILD_TYPE}} --target ${{env.CMAKE_TARGETS}}
 
     - name: Run Program
-      shell: cmd
-      run: ${{github.workspace}}/build/Program.exe
+      run: ${{github.workspace}}\build\Program.exe
 
-    - name: Check
-      shell: cmd
-      run: dir ${{env.PACKAGE_LOCATION}}
+    - name: Check Packages
+      run: ls ${{env.PACKAGE_LOCATION}}
 
     - name: Extract Version
       id: version
       run: |
-        $v = cat ${{env.PACKAGE_LOCATION}}/VERSION.txt
+        $v = cat ${{env.PACKAGE_LOCATION}}\VERSION.txt
         "version=$v" >> $env:GITHUB_OUTPUT
         echo "version: $v"
-
-    - name: Show Version
-      env:
-        VERSION: ${{steps.version.outputs.version}}
-      run: echo "Build version is $env:VERSION"
     
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: Qt-Workflow-Windows-${{steps.version.outputs.version}}
-        path: ${{env.PACKAGE_LOCATION}}/*.zip
-
+        path: ${{env.PACKAGE_LOCATION}}\*.zip
 
     - name: Release
       # if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
       uses: softprops/action-gh-release@v2
+      continue-on-error: true
       with:
         tag_name: v${{ steps.version.outputs.VERSION }}
         name: Qt Workflow ${{ steps.version.outputs.VERSION }}
         generate_release_notes: true
-        files: ${{env.PACKAGE_LOCATION}}/Qt-Workflow-Windows-${{steps.version.outputs.version}}.zip
+        files: ${{env.PACKAGE_LOCATION}}\Qt-Workflow*
         make_latest: true
-
