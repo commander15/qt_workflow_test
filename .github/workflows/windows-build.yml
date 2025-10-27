@@ -71,7 +71,8 @@ jobs:
       id: version
       run: |
         $v = cat ${{env.PACKAGE_LOCATION}}/VERSION.txt
-        echo "version=$v" >> $GITHUB_ENV
+        echo "version=$v" >> $GITHUB_OUTPUT
+        echo "version: $v"
 
     - name: Show Version
       run: echo ${{steps.version.outputs.version}}
