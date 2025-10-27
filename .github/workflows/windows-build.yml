@@ -97,5 +97,5 @@ jobs:
         body: Awesome update, try it to known what have been added to version ${{ steps.version.outputs.VERSION }}
         tag_name: v${{ steps.version.outputs.VERSION }}
         generate_release_notes: true
-        files: ${{env.PACKAGE_LOCATION}}\Qt-Workflow*
+        files: ${{env.PACKAGE_LOCATION}}\Qt-Workflow*.*
         make_latest: true
