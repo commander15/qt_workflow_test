@@ -96,5 +96,6 @@ jobs:
         name: Qt Workflow ${{ steps.version.outputs.VERSION }} released 🎉
         body: Awesome update, try it to known what have been added to version ${{ steps.version.outputs.VERSION }}
         tag_name: v${{ steps.version.outputs.VERSION }}
-        files: ${{env.PACKAGE_LOCATION}}\*
+        generate_release_notes: true
+        files: ${{env.PACKAGE_LOCATION}}
         make_latest: true
