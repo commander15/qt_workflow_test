@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 4.0)
 
-project(QtWorkflowTest)
+project(QtWorkflowTest VERSION 1.0.0)
 
 set(CMAKE_AUTOMOC)
 

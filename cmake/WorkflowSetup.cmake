@@ -18,3 +18,7 @@ cpack_ifw_configure_component(Program
 
 set(CPACK_GENERATOR ZIP)
 include(CPack)
+
+
+# Writing version file
+file(WRITE ${CPACK_PACKAGE_DIRECTORY}/VERSION.txt ${PROJECT_VERSION})
