@@ -71,11 +71,13 @@ jobs:
       id: version
       run: |
         $v = cat ${{env.PACKAGE_LOCATION}}/VERSION.txt
-        echo "version=$v" >> $GITHUB_OUTPUT
+        "version=$v" >> $env:GITHUB_OUTPUT
         echo "version: $v"
 
     - name: Show Version
-      run: echo ${{steps.version.outputs.version}}
+      env:
+        VERSION: ${{steps.version.outputs.version}}
+      run: echo "Build version is $env:VERSION"
     
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
@@ -83,4 +85,21 @@ jobs:
         name: Qt-Workflow-Windows-${{steps.version.outputs.version}}
         path: ${{env.PACKAGE_LOCATION}}/*.zip
 
+
+    - name: Release
+      # if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+      if: false
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v${{ steps.version.outputs.VERSION }}
+        name: NIC-Stats v${{ steps.version.outputs.VERSION }}
+        draft: false
+        prerelease: false
+        files: NIC-Stats-v${{ steps.version.outputs.VERSION }}-windows.zip
+        body: |
+          **NIC-Stats** – Windows build  
+          Version: `${{ steps.version.outputs.VERSION }}`  
+          Built on `${{ github.sha }}`
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
